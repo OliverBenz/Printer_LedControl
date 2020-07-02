@@ -31,19 +31,19 @@ def changeLight(status):
     # No light
     updateLight(0, 0, 0)
 
-  if status == "Error" or status == "Cancelling":
+  elif status == "Error" or status == "Cancelling":
     # Red light
     updateLight(255, 0, 0)
 
-  if status == "Printing":
+  elif status == "Printing":
     # White light
     updateLight(120, 120, 120)
 
-  if status == "Pausing" or status == "Paused":
+  elif status == "Pausing" or status == "Paused":
     # Yellow light
     updateLight(255, 255, 0)
 
-  if status == "Operational":
+  elif status == "Operational":
     # Green light
     updateLight(0, 255, 0)
 
