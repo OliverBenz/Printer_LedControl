@@ -16,18 +16,18 @@ def getTest():
             "averagePrintTime": 38923.424780887, 
             "estimatedPrintTime": 33079.77878218678, 
             "filament": {
-            "tool0": {
-                "length": 30124.544599997087, 
-                "volume": 0.0
-            }
+                "tool0": {
+                    "length": 30124.544599997087, 
+                    "volume": 0.0
+                }
             }, 
             "file": {
-            "date": 1563137072, 
-            "display": "nespresso-holder_10h5min_30,09_90_1,97.gcode", 
-            "name": "nespresso-holder_10h5min_30-09_90_1-97.gcode", 
-            "origin": "local", 
-            "path": "Queue/nespresso-holder_10h5min_30-09_90_1-97.gcode", 
-            "size": 8960200
+                "date": 1563137072, 
+                "display": "nespresso-holder_10h5min_30,09_90_1,97.gcode", 
+                "name": "nespresso-holder_10h5min_30-09_90_1-97.gcode", 
+                "origin": "local", 
+                "path": "Queue/nespresso-holder_10h5min_30-09_90_1-97.gcode", 
+                "size": 8960200
             }, 
             "lastPrintTime": 38923.424780887, 
             "user": "OliverBenz"
@@ -38,7 +38,7 @@ def getTest():
             "printTime": 38923, 
             "printTimeLeft": 0, 
             "printTimeLeftOrigin": 0
-        }, 
+        },
         "state": "Operational"
     }
 
