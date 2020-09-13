@@ -5,68 +5,70 @@ import json
 
 pi = pigpio.pi()
 
-# Get print status
-# Read expected time remaining
-# Make new call when 2/3 of expected time remaining are done
-# if ETR < 2 sec -> wait 2 sec
-# if ETC > 5h -> wait 1h
-
-def getValues():
-  return json.loads(requests.get('http://127.0.0.1:3004/api/job').json())
-
 # pi.set_PWM_dutycycle(r[0], r[1])
 # red - 17
 # green - 22
 # blue - 24
 
-def updateLight(red, green, blue):
-  pi.set_PWM_dutycycle(17, red)
-  pi.set_PWM_dutycycle(22, green)
-  pi.set_PWM_dutycycle(24, blue)
+class Light:
+  def __init__(self, pRed, pGreen, pBlue):
+    self.red = 0
+    self.green = 0
+    self.blue = 0
 
-# TODO: Check if colors look good over camera
-# 255 might be too bright
-def changeLight(status):
-  if status == "Offline":
-    # No light
-    updateLight(0, 0, 0)
+    self.portRed = pRed
+    self.portGreen = pGreen
+    self.portBlue = pBlue
 
-  elif status == "Error" or status == "Cancelling":
-    # Red light
-    updateLight(255, 0, 0)
+  def setColor(self, r, g, b):
+    self.red = r
+    self.green = g
+    self.blue = b
+  
+  def updateLights(self):
+    pi.set_PWM_dutycycle(self.portRed, self.red)
+    pi.set_PWM_dutycycle(self.portGreen), self.green)
+    pi.set_PWM_dutycycle(self.portBlue, self.blue)
+  
+  def changeColor(self, status):
+    if status == "Offline":
+      self.setColor(0, 0, 0)       # Off
+    
+    elif status == "Error" or status == "Cancelling":
+      self.setColor(255, 0, 0)     # Red
 
-  elif status == "Printing":
-    # White light
-    updateLight(120, 120, 120)
+    elif status == "Printing":
+      self.setColor(120, 120, 120) # White
 
-  elif status == "Pausing" or status == "Paused":
-    # Yellow light
-    updateLight(255, 255, 0)
+    elif status == "Pausing" or status == "Paused":
+      self.setColor(255, 255, 0)   # Yellow
 
-  elif status == "Operational":
-    # Green light
-    updateLight(0, 255, 0)
+    elif status == "Operational":
+      self.setColor(0, 255, 0)     # Green
+
+    self.updateLights()
 
 
 if __name__ == "__main__":
-  status = ""
-  r = getValues()
-  # BUG: What is timeremainvalue if print is done? Wait some time if print is done
-  # TODO: If print is done -> check for changed status every 5min??
+  Light light(17, 22, 24);
+  prev_status = ""
 
-  # If status hasn't changed -> Wait 2/3 of expected time remaining
-  # 2sec < ETR < 5h 
-  time = 0
-  if r["state"] == status:
-    if r["progress"]["printTimeLeft"] < 2:
-      time = 2
-    elif r["progress"]["printTimeLeft"] > 18000:
-      time = 3600
-    else:
-      time = (2/3) * r["progress"]["printTimeLeft"]
+  while True:
+    r = json.loads(requests.get('http://127.0.0.1:3004/api/job').json())
 
-    sleep(time)
+    # If status hasn't changed -> Wait 2/3 of expected time remaining
+    # 2sec < ETR < 5h 
+    time = 0
+    if r["state"] == prev_status:
+      if r["progress"]["printTimeLeft"] < 2:
+        time = 2
+      elif r["progress"]["printTimeLeft"] > 18000:
+        time = 3600
+      else:
+        time = (2/3) * r["progress"]["printTimeLeft"]
 
-  else:
-    status = r["state"]
-    changeLight(status)
+      sleep(time)
+
+    else:  # Update lighting
+      prev_status = r["state"]
+      light.changeColor(status)
