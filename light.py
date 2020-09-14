@@ -1,3 +1,5 @@
+import pigpio
+
 class Light:
   def __init__(self, pRed, pGreen, pBlue):
     self.red = 0

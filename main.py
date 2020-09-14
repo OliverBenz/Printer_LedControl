@@ -1,9 +1,8 @@
-import pigpio
 import requests
 import json
 
 from time import sleep
-from Light import Light
+from light import Light
 
 pi = pigpio.pi()
 
