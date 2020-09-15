@@ -2,17 +2,11 @@ import requests
 import json
 
 from time import sleep
-from light import Light
-
-pi = pigpio.pi()
-
-# pi.set_PWM_dutycycle(r[0], r[1])
-# red - 17
-# green - 22
-# blue - 24
+from classes import light
+from classes.light import Light
 
 if __name__ == "__main__":
-  Light light(17, 22, 24);
+  light = Light(17, 22, 24)
   prev_status = ""
 
   while True:
@@ -33,4 +27,4 @@ if __name__ == "__main__":
 
     else:  # Update lighting
       prev_status = r["state"]
-      light.changeColor(status)
+      light.change_color(status)
